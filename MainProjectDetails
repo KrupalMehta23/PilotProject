@@ -1,0 +1,38 @@
+Question 1: Given some sample data, write a program to answer the following:
+
+On Shopify, we have exactly 100 sneaker shops, and each of these shops sells only one model of shoe. We want to do some analysis of the average order value (AOV). When we look at orders data over a 30 day window, we naively calculate an AOV of $3145.13. Given that we know these shops are selling sneakers, a relatively affordable item, something seems wrong with our analysis. 
+
+a.	Think about what could be going wrong with our calculation. Think about a better way to evaluate this data. 
+->	Here, factor like the location of the shop (Metro-City/Town), Age of the users and gender could have been included, which would have provided additional information like the number of customers, the tax rate as per location and the popularity of the shoe among the gender. These details vary as per the factors. In addition, an important factor of type of the customer is missing that leads to an ambiguous conclusion of AOV of $3145.128. 
+
+    As per my analysis, I have further divided the number of the orders given by customers into a category of customer type as 1-2 pair of shoes – Occasional buyers, 3-9 pair of shoes - Retailers and greater than 10 pair of shoes - Wholesalers)
+
+    As per the data, the highest number of buyers are Occasional buyers (Count – 3662), whereas the least number of buyers are wholesalers (Count – 17)
+
+
+b.	What metric would you report for this dataset?
+-> As per the data, most of the revenue is generated from Wholesalers (Sum - $11968000) and the least by Occasional buyers (Sum - $2138171). Moreover, from the data there is only one customer with user Id 607 as wholesaler. Thus, if we divide the average order value as per the buyers then the actual average value changes, providing better insights about the sales.
+
+   Thus, Shopify can focus on increasing the number of wholesalers that can provide more revenue and sales. They can further improve the count of wholesalers by doing more advertising or providing additional discounts to them.
+
+c.	What is its value?
+->	The average order value considering only Occasional buyers is $583.88. Whereas for Wholesalers the AOV is $704000 and for Retailers it is $1225.94. The grand total of $3145.128 is the AOV from all the customers. 
+    
+Question 2: For this question you’ll need to use SQL. Follow this link to access the data set required for the challenge. Please use queries to answer the following questions. Paste your queries along with your final numerical answers below.
+
+a.	How many orders were shipped by Speedy Express in total?
+->	SELECT Count(OrderID) as NumberofOrdersShipped FROM Orders where ShipperId = 1;
+	
+b.	What is the last name of the employee with the most orders?
+->	Select E.LastName,
+	COUNT(O.EmployeeID) AS `Number of Orders` 
+	FROM     Orders as O join Employees as E on O.EmployeeID = E.EmployeeID
+        	GROUP BY O.EmployeeID
+	ORDER BY `Number of Orders` DESC Limit 1;
+
+c.	What product was ordered the most by customers in Germany?
+->	SELECT P.ProductName, COUNT(D.ProductID) AS `Number of Orders` 
+from (OrderDetails as D join Products as P on D.ProductID = P.ProductID) join Orders as O on D.OrderID = O.OrderID
+Join Customers as C on O.CustomerID = C.CustomerId where C.Country = 'Germany'
+     	   	GROUP BY D.ProductID
+	    	ORDER BY `Number of Orders` DESC Limit 1;
